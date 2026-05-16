@@ -1,0 +1,19 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "DenyEksUpdateThatDisablesDeletionProtection",
+      "Effect": "Deny",
+      "Action": "eks:UpdateClusterConfig",
+      "Resource": "*",
+      "Condition": {
+        "Bool": {
+          "eks:deletionProtection": "false"
+        },
+        "ArnNotLike": {
+          "aws:PrincipalArn": "arn:aws:iam::*:role/BreakGlassEKSAdmin"
+        }
+      }
+    }
+  ]
+}

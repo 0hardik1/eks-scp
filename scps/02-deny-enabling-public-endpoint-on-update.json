@@ -1,0 +1,19 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "DenyEksUpdateThatEnablesPublicEndpoint",
+      "Effect": "Deny",
+      "Action": "eks:UpdateClusterConfig",
+      "Resource": "*",
+      "Condition": {
+        "Bool": {
+          "eks:endpointPublicAccess": "true"
+        },
+        "ArnNotLike": {
+          "aws:PrincipalArn": "arn:aws:iam::*:role/BreakGlassEKSAdmin"
+        }
+      }
+    }
+  ]
+}

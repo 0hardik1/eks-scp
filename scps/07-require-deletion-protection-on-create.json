@@ -1,0 +1,33 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "DenyEksClusterCreateWithoutDeletionProtection",
+      "Effect": "Deny",
+      "Action": "eks:CreateCluster",
+      "Resource": "*",
+      "Condition": {
+        "Bool": {
+          "eks:deletionProtection": "false"
+        },
+        "ArnNotLike": {
+          "aws:PrincipalArn": "arn:aws:iam::*:role/BreakGlassEKSAdmin"
+        }
+      }
+    },
+    {
+      "Sid": "DenyEksClusterCreateWhenDeletionProtectionMissing",
+      "Effect": "Deny",
+      "Action": "eks:CreateCluster",
+      "Resource": "*",
+      "Condition": {
+        "Null": {
+          "eks:deletionProtection": "true"
+        },
+        "ArnNotLike": {
+          "aws:PrincipalArn": "arn:aws:iam::*:role/BreakGlassEKSAdmin"
+        }
+      }
+    }
+  ]
+}

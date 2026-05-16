@@ -1,0 +1,41 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "DenyEksClusterWithoutKmsEnvelopeEncryption",
+      "Effect": "Deny",
+      "Action": [
+        "eks:CreateCluster",
+        "eks:AssociateEncryptionConfig"
+      ],
+      "Resource": "*",
+      "Condition": {
+        "Null": {
+          "eks:encryptionConfigProviderKeyArns": "true"
+        },
+        "ArnNotLike": {
+          "aws:PrincipalArn": "arn:aws:iam::*:role/BreakGlassEKSAdmin"
+        }
+      }
+    },
+    {
+      "Sid": "DenyEksClusterWithUnapprovedKmsKey",
+      "Effect": "Deny",
+      "Action": [
+        "eks:CreateCluster",
+        "eks:AssociateEncryptionConfig"
+      ],
+      "Resource": "*",
+      "Condition": {
+        "ForAnyValue:ArnNotLike": {
+          "eks:encryptionConfigProviderKeyArns": [
+            "arn:aws:kms:*:111122223333:key/REPLACE-WITH-APPROVED-CMK-UUID"
+          ]
+        },
+        "ArnNotLike": {
+          "aws:PrincipalArn": "arn:aws:iam::*:role/BreakGlassEKSAdmin"
+        }
+      }
+    }
+  ]
+}

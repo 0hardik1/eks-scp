@@ -1,0 +1,19 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "DenyEksClusterCreateBelowMinimumKubernetesVersion",
+      "Effect": "Deny",
+      "Action": "eks:CreateCluster",
+      "Resource": "*",
+      "Condition": {
+        "StringLessThan": {
+          "eks:kubernetesVersion": "1.31"
+        },
+        "ArnNotLike": {
+          "aws:PrincipalArn": "arn:aws:iam::*:role/BreakGlassEKSAdmin"
+        }
+      }
+    }
+  ]
+}

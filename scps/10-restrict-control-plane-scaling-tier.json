@@ -1,0 +1,22 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "DenyEksClusterWithUnapprovedControlPlaneScalingTier",
+      "Effect": "Deny",
+      "Action": [
+        "eks:CreateCluster",
+        "eks:UpdateClusterConfig"
+      ],
+      "Resource": "*",
+      "Condition": {
+        "StringNotEquals": {
+          "eks:controlPlaneScalingTier": "STANDARD"
+        },
+        "ArnNotLike": {
+          "aws:PrincipalArn": "arn:aws:iam::*:role/BreakGlassEKSAdmin"
+        }
+      }
+    }
+  ]
+}
